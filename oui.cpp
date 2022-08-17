@@ -3,13 +3,17 @@
 
 int main()
 {
-	ft::vector<int> oui;
-    ft::vector<int> non (10, 20);
-    // std::vector<int> cc (10, 20);
-
-
-    // for (size_t i = 0; i < 10; i++)
-    //     cout << non[0] << endl;
-
+	// ft::vector<int> oui;
+    ft::vector<string> non (2, "uwu");
+    // std::vector<char> letters {'o', 'm', 'g', 'w', 't', 'f'};
+    non.at(0) = "owo";
+    try 
+    {
+        cout << non.back() << endl;
+    }
+    catch (const exception &o)
+    {
+        cerr << o.what() << endl;
+    }
 	return 0;
 }

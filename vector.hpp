@@ -9,6 +9,7 @@ using std::exception;
 using std::cout;
 using std::endl;
 using std::cerr;
+using std::ptrdiff_t;
 
 namespace ft
 {
@@ -25,48 +26,89 @@ namespace ft
             typedef typename allocator_type::const_reference const_reference;
             typedef typename allocator_type::pointer pointer;
             typedef typename allocator_type::const_pointer const_pointer;
+            //! iterator
+            //! const iterator
+            //! reverse iterator
+            //! const reverse iterator
 
-            explicit vector(const allocator_type& alloc = allocator_type()) : _array(0), _start(0), _end(0), _maxcapacity(0), _alloc(alloc) {}
-            explicit vector(size_type n, const value_type &value = value_type(), const allocator_type& alloc = allocator_type())
+            vector(const allocator_type& alloc = allocator_type()) : _start(0), _end(0), _maxcapacity(0), _alloc(alloc) {}
+            vector(size_type n, const value_type &value = value_type(), const allocator_type& alloc = allocator_type())
             {
-                try
+                this->_alloc = alloc;
+                this->_start = this->_alloc.allocate(n);
+                this->_end = this->_start;
+                this->_maxcapacity = this->_start + n;
+                while (n--)
                 {
-                    this->_alloc = alloc;
-                    this->_start = this->_alloc.allocate(n);
-                    this->_end = this->_start;
-                    while (n--)
-                    {
-                        this->_alloc.construct(this->_end++, value);
-                        this->_maxcapacity++;
-                    }
+                    this->_alloc.construct(this->_end++, value);
                 }
-                catch (const exception &a)
-                {
-                    cerr << a.what() << endl;
-                }
+                cout << _start << endl;
+                cout << _end << endl;
             }
-            explicit vector(const vector &params) : _alloc(params._alloc)
+            vector(const vector &params) : _alloc(params._alloc)
             {
-                this->_start = params._start;
-                this->_end = params._start;
-                this->_maxcapacity = params._maxcapacity;
-                pointer help = _maxcapacity;
-                while (help--)
-                    this->_alloc.construct(_end++, *params);
+                size_type size = params.size();
+                this->_start = this->_alloc.allocate(size);
+                this->_end = this->_start;
+                this->_maxcapacity = this->_start + size;
+                pointer uwu = params._start;
+                while (size--)
+                    this->_alloc.construct(this->_end++, *uwu++);
             }
+            // vector &operator=(const vector &params)
+            // {
+
+            // }
             ~vector()
             {
                 // this->_alloc.deallocate(this->_start,)
             }
 
+            reference at(size_type value) const
+            {
+                if (value >= 2) //! CHANGE 2 TO SIZE
+                    throw OutOfRangeException();
+                return (this->_start[value]);
+            }
+            reference at(size_type value)
+            {
+                if (value >= 2) //! CHANGE 2 TO SIZE
+                    throw OutOfRangeException();
+                return (this->_start[value]);
+            }
+            
+            T operator[](size_type n)
+            {
+                if (n >= 2)
+                    throw OutOfRangeException();
+                return (this->_start[n]);
+            }
+            T &operator[](size_type n) const
+            {
+                if (n >= 2)
+                    throw OutOfRangeException();
+                return (this->_start[n]);
+            }
+            // size_type size()
+            // {
+            //     return ()
+            // }
+            // reference front()
+            // {
+            //     return (this->_start[0]);
+            // }
+
+            // reference back()
+            // {
+            //     return (this->_start[_end]);
+            // }
 
         private :
 
-        T *_array;
-        pointer _start;
-        pointer _end;
-        pointer _maxcapacity;
-        allocator_type _alloc;
+            pointer _start;
+            pointer _end;
+            pointer _maxcapacity;
+            allocator_type _alloc;
 
         class OutOfRangeException : public exception
         {
