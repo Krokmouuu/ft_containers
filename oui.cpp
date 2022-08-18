@@ -4,12 +4,20 @@
 int main()
 {
 	// ft::vector<int> oui;
-    ft::vector<string> non (2, "uwu");
-    // std::vector<char> letters {'o', 'm', 'g', 'w', 't', 'f'};
-    non.at(0) = "owo";
+    ft::vector<int> non (3, 10);
+    ft::vector<int> oui (3, 2);
+    std::vector<int> real;
     try 
     {
-        cout << non.back() << endl;
+        non.swap(non);
+        for (size_t i = 0; i < non.size(); i++)
+            cout << non[i] << endl;
+        non.swap(non);
+        for (size_t i = 0; i < non.size(); i++)
+            cout << non[i] << endl;
+        // cout << non.at(1) << endl;
+
+        // cout << real.empty() << endl;
     }
     catch (const exception &o)
     {
