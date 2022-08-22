@@ -3,6 +3,7 @@
 #include <iostream>
 #include "limits.h"
 #include <memory>
+#include "iterator.hpp"
 
 using std::string;
 using std::exception;
@@ -57,7 +58,32 @@ namespace ft
             // }
             ~vector()
             {
-                // this->_alloc.deallocate(this->_start,)
+                this->clear();
+                size_type i = this->capacity();
+                this->_alloc.deallocate(this->_start, i);
+            }
+
+            void assign(size_type count, const value_type &value)
+            {
+                if (count > size())
+                {
+                    pointer tmp = this->_start;
+                    for (; tmp < this->_end; tmp++)
+                        this->_alloc.construct(tmp, value);
+                    while (count != size())
+                        push_back(value);
+                }
+                else
+                {
+                    pointer tmp = this->_start;
+                    for (size_type i = 0; i < count; i++)
+                        this->_alloc.construct(tmp++, value);
+                }
+            }
+            
+            allocator_type get_allocator() const
+            {
+                return this->_alloc;
             }
 
             const_reference at(size_type value) const
@@ -87,12 +113,12 @@ namespace ft
             }
             // reference front()
             // {
-            //     return (this->_start[0]);
+            //     return 
             // }
 
             // reference back()
             // 
-            //     return (this->_start[_end]);
+            //     return 
             // }
 
             bool empty() const
@@ -177,6 +203,8 @@ namespace ft
                     reserve(size() + 1);
                     this->_alloc.construct(this->_end++, value);
                 }
+                else
+                    this->_alloc.construct(this->_end++, value);
             }
             void pop_back()
             {
