@@ -32,6 +32,15 @@ namespace ft
             //! reverse iterator
             //! const reverse iterator
 
+            // iterator begin()
+            // {
+            //     return this->_start;
+            // }
+            // iterator end()
+            // {
+            //     return this->_end;
+            // }
+
             explicit vector(const allocator_type& alloc = allocator_type()) : _start(0), _end(0), _maxcapacity(0), _alloc(alloc) {}
             explicit vector(size_type n, const value_type &value = value_type(), const allocator_type& alloc = allocator_type())
             {
@@ -42,6 +51,12 @@ namespace ft
                 while (n--)
                     this->_alloc.construct(this->_end++, value);
             }
+            
+            // template<class InputIt>
+            // vector (InputIt first, InputIt last, const allocator_type &alloc = allocator_type())
+            // {
+
+            // }
             vector(const vector &params) : _alloc(params._alloc)
             {
                 size_type size = params.size();
@@ -54,7 +69,15 @@ namespace ft
             }
             // vector &operator=(const vector &params)
             // {
-
+            //     pointer old_start = this->_start;
+            //     // pointer old_end = this->_end;
+            //     pointer tmp = params._start;
+            //     pointer end = params._end;
+            //     while (tmp != end)
+            //         this->_alloc.construct(tmp++, *old_start);
+            //     // for (size_type len = old_end - old_start; len > 0; len--)
+            //     //     this->_alloc.destroy(old_end--); 
+            //     return *this;
             // }
             ~vector()
             {
@@ -117,10 +140,9 @@ namespace ft
             // }
 
             // reference back()
-            // 
+            
             //     return 
             // }
-
             bool empty() const
             {
                 if (this->_start == this->_end)
@@ -246,6 +268,7 @@ namespace ft
                 other._end = tmp1;
                 other._maxcapacity = tmp2;
             }
+
 
         private :
 
