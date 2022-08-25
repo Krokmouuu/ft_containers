@@ -4,6 +4,7 @@
 #include "limits.h"
 #include <memory>
 #include "iterator.hpp"
+#include "enable_if.hpp"
 
 using std::string;
 using std::exception;
@@ -27,19 +28,19 @@ namespace ft
             typedef typename allocator_type::const_reference const_reference;
             typedef typename allocator_type::pointer pointer;
             typedef typename allocator_type::const_pointer const_pointer;
-            //! iterator
-            //! const iterator
-            //! reverse iterator
-            //! const reverse iterator
+            typedef typename ft::iterator_traits<value_type> iterator; 
+            typedef typename ft::iterator_traits<const value_type> const_iterator; 
+            typedef typename ft::reverse_iterator<value_type> reverse_iterator; 
+            typedef typename ft::reverse_iterator<const value_type> const_reverse_iterator; 
 
-            // iterator begin()
-            // {
-            //     return this->_start;
-            // }
-            // iterator end()
-            // {
-            //     return this->_end;
-            // }
+            iterator begin()
+            {
+                return *this->_start;
+            }
+            iterator end()
+            {
+                return *this->_end;
+            }
 
             explicit vector(const allocator_type& alloc = allocator_type()) : _start(0), _end(0), _maxcapacity(0), _alloc(alloc) {}
             explicit vector(size_type n, const value_type &value = value_type(), const allocator_type& alloc = allocator_type())

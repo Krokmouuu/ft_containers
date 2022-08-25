@@ -1,17 +1,18 @@
 #pragma once
 
 #include <iostream>
+#include "vector.hpp"
 
 namespace ft
 {
     struct input_iterator_tag {};
-    struct output_iterator_tag { ;
-    struct forward_iterator_tag : public input_iterator_tag {};
-    struct bidirectional_iterator_tag : public forward_iterator_tag {};
-    struct random_access_iterator_tag : public bidirectional_iterator_tag {};
+    struct output_iterator_tag {};
+    // struct forward_iterator_tag : public input_iterator_tag {};
+    // struct bidirectional_iterator_tag : public forward_iterator_tag {};
+    // struct random_access_iterator_tag : public bidirectional_iterator_tag {};
 
     template <class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T&>
-    struct iterator 
+    struct iterator
     {
         typedef T value_type;
         typedef Distance difference_type;
@@ -33,7 +34,6 @@ namespace ft
     template <class T>
     struct iterator_traits<T*>
     {
-        typedef random_access_iterator_tag iterator_category;
         typedef ptrdiff_t difference_type;
         typedef T         value_type;
         typedef T*        pointer;
@@ -43,7 +43,6 @@ namespace ft
     template <class T>
     struct iterator_traits<const T*> 
     {
-        typedef random_access_iterator_tag iterator_category;
         typedef ptrdiff_t difference_type;
         typedef T         value_type;
         typedef T*        pointer;
@@ -149,42 +148,41 @@ namespace ft
             {
                 return *(*this + n);
             }
-
     };
 
-        template<typename Iterator>
-        bool operator==(const reverse_iterator<Iterator>& x, const reverse_iterator<Iterator>& y)
+        template<typename Iterator1, typename Iterator2>
+        bool operator==(const ft::reverse_iterator<Iterator1>& x, const ft::reverse_iterator<Iterator2>& y)
         {
             return x.base() == y.base();
         }
 
-        template<typename Iterator>
-        bool operator<(const reverse_iterator<Iterator>& x, const reverse_iterator<Iterator>& y)
+        template<typename Iterator1, typename Iterator2>
+        bool operator<(const reverse_iterator<Iterator1>& x, const reverse_iterator<Iterator2>& y)
         {
             return y.base() < x.base();
         }
 
-        template<typename Iterator>
-        bool operator>(const reverse_iterator<Iterator>& x, const reverse_iterator<Iterator>& y)
+        template<typename Iterator1, typename Iterator2>
+        bool operator>(const reverse_iterator<Iterator1>& x, const reverse_iterator<Iterator2>& y)
         {
             return y < x;
         }
 
-        template<typename Iterator>
-        bool operator<=(const reverse_iterator<Iterator>& x, const reverse_iterator<Iterator>& y)
+        template<typename Iterator1, typename Iterator2>
+        bool operator<=(const reverse_iterator<Iterator1>& x, const reverse_iterator<Iterator2>& y)
         {
             return !(y < x);
         }
 
-        template<typename Iterator>
-        bool operator>=(const reverse_iterator<Iterator>& x, const reverse_iterator<Iterator>& y)
+        template<typename Iterator1, typename Iterator2>
+        bool operator>=(const reverse_iterator<Iterator1>& x, const reverse_iterator<Iterator2>& y)
         {
             return !(x < y);
         }
 
-        template<typename Iterator>
-        bool operator !=(const reverse_iterator<Iterator>& x, const reverse_iterator<Iterator>& y)
+        template<typename Iterator1, typename Iterator2>
+        bool operator!=(const reverse_iterator<Iterator1>& x, const reverse_iterator<Iterator2>& y)
         {
             return !(x.base() == y.base());
         }
-}
+};
