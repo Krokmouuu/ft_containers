@@ -13,8 +13,8 @@ using std::endl;
 using std::cerr;
 using std::ptrdiff_t;
 
-
 //? Ref : https://cplusplus.com/reference/vector/vector/
+//? Ref : https://en.cppreference.com/w/cpp/container/vector
 
 namespace ft
 {
@@ -31,19 +31,11 @@ namespace ft
             typedef typename allocator_type::const_reference const_reference;
             typedef typename allocator_type::pointer pointer;
             typedef typename allocator_type::const_pointer const_pointer;
-            typedef typename ft::iterator_traits<value_type> iterator; 
-            typedef typename ft::iterator_traits<const value_type> const_iterator; 
-            typedef typename ft::reverse_iterator<value_type> reverse_iterator; 
-            typedef typename ft::reverse_iterator<const value_type> const_reverse_iterator; 
+            typedef typename ft::classic_iterator<pointer, vector> iterator; 
+            typedef typename ft::classic_iterator<const_pointer, vector> const_iterator; 
+            typedef typename ft::reverse_iterator<iterator> reverse_iterator; 
+            typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator; 
 
-            iterator begin()
-            {
-                return *this->_start;
-            }
-            iterator end()
-            {
-                return *this->_end;
-            }
 
             explicit vector(const allocator_type& alloc = allocator_type()) : _start(0), _end(0), _maxcapacity(0), _alloc(alloc) {}
             explicit vector(size_type n, const value_type &value = value_type(), const allocator_type& alloc = allocator_type())
@@ -90,13 +82,52 @@ namespace ft
                 this->_alloc.deallocate(this->_start, i);
             }
 
+            iterator begin()
+            {
+                return  iterator(this->_start);
+            }
+
+            const_iterator begin() const
+            {
+                return const_iterator(this->_start);
+            }
+    
+            iterator end()
+            {
+                return iterator(this->_end - 1);
+            }
+
+            const_iterator end() const
+            {
+                return const_iterator(this->_end - 1);
+            }
+
+            reverse_iterator rbegin()
+            {
+                return reverse_iterator(this->_end);
+            }
+
+            reverse_iterator rend()
+            {
+                return reverse_iterator(this->_start);
+            } 
+            const_reverse_iterator rbegin() const
+            {
+                return reverse_iterator(this->_end);
+            }
+
+            const_reverse_iterator rend() const
+            {
+                return reverse_iterator(this->_start);
+            } 
+
             void assign(size_type count, const value_type &value)
             {
                 if (count > size())
                 {
                     pointer tmp = this->_start;
-                    for (; tmp < this->_end; tmp++)
-                        this->_alloc.construct(tmp, value);
+                    for (; tmp < this->_end; tmp)
+                        this->_alloc.construct(++tmp, value);
                     while (count != size())
                         push_back(value);
                 }
@@ -104,7 +135,7 @@ namespace ft
                 {
                     pointer tmp = this->_start;
                     for (size_type i = 0; i < count; i++)
-                        this->_alloc.construct(tmp++, value);
+                        this->_alloc.construct(++tmp, value);
                 }
             }
             
@@ -138,15 +169,34 @@ namespace ft
                     throw OutOfRangeException();
                 return (this->_start[n]);
             }
-            // reference front()
-            // {
-            //     return 
-            // }
 
-            // reference back()
-            
-            //     return 
-            // }
+            reference front()
+            {
+                return *begin();
+            }
+            const_reference front() const
+            {
+                return *begin();
+            }
+
+            reference back()
+            {
+                return *(end() - 1);
+            }
+
+            const_reference back() const
+            {
+                return *(end() - 1);
+            }
+
+            pointer data()
+            {
+                return this->_start;
+            }
+            const_pointer data() const
+            {
+                return this->_start;
+            }
             bool empty() const
             {
                 if (this->_start == this->_end)
@@ -186,7 +236,7 @@ namespace ft
                     this->_maxcapacity = this->_start + new_cap;
 
                     for (pointer new_capacity = old_start; new_capacity != old_end; new_capacity++)
-                        this->_alloc.construct(this->_end++, *new_capacity);
+                        this->_alloc.construct(++this->_end, *new_capacity);
                     for (size_type len = old_end - old_start; len > 0; len--)
                         this->_alloc.destroy(old_end--);
                     this->_alloc.deallocate(old_start, old_maxcapacity);
