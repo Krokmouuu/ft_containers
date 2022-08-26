@@ -3,6 +3,10 @@
 #include <iostream>
 #include "vector.hpp"
 
+//? Ref : https://en.cppreference.com/w/cpp/iterator/iterator
+//? Ref : https://en.cppreference.com/w/cpp/iterator/iterator_traits
+//? Ref : https://en.cppreference.com/w/cpp/iterator/reverse_iterator
+
 namespace ft
 {
     struct input_iterator_tag {};

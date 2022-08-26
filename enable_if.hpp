@@ -1,8 +1,11 @@
 #pragma once
 
+//? Ref : https://en.cppreference.com/w/cpp/types/enable_if
+//? Ref : https://h-deb.clg.qc.ca/Sujets/TrucsScouts/Comprendre_enable_if.html
+
 namespace ft {
 
-    template <bool Condition, class T = void>
+    template <bool B, class T = void>
     struct enable_if {};
 
     template <class T>

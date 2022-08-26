@@ -13,6 +13,9 @@ using std::endl;
 using std::cerr;
 using std::ptrdiff_t;
 
+
+//? Ref : https://cplusplus.com/reference/vector/vector/
+
 namespace ft
 {
     template <typename T, typename Allocator = std::allocator<T> >
