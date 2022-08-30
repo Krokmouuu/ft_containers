@@ -72,16 +72,16 @@ namespace ft
             typedef typename iterator_traits<Iterator>::pointer pointer;
             typedef typename iterator_traits<Iterator>::reference reference;
 
-            classic_iterator() : _val() {};
+            classic_iterator() : _val() {}
             
             explicit classic_iterator(iterator_type value) : _val(value) {}
 
-            classic_iterator(const classic_iterator &params) : _val(params._val) {};
+            classic_iterator(const classic_iterator &params) : _val(params._val) {}
 
             template <class T>
-            classic_iterator(const classic_iterator<T, container> &params) : _val(params._val) {};
+            classic_iterator(const classic_iterator<T, container> &params) : _val(params.base()) {} 
 
-            virtual ~classic_iterator() {};
+            virtual ~classic_iterator() {}
 
             iterator_type base() const
             {
@@ -216,7 +216,7 @@ namespace ft
             reverse_iterator(const reverse_iterator& params) : _actual(params._actual) {}
         
             template <class T>
-            reverse_iterator(const reverse_iterator<T>& params) : _actual(params._actual) {}
+            reverse_iterator(const reverse_iterator<T> &params) : _actual(params.base()) {}
 
             virtual ~reverse_iterator() {}
 
@@ -291,7 +291,7 @@ namespace ft
     };
 
         template<typename Iterator1, typename Iterator2>
-        bool operator==(const ft::reverse_iterator<Iterator1>& x, const ft::reverse_iterator<Iterator2>& y)
+        bool operator==(const reverse_iterator<Iterator1>& x, const reverse_iterator<Iterator2>& y)
         {
             return x.base() == y.base();
         }

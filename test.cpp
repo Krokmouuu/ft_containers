@@ -3,17 +3,20 @@
 
 int main()
 {
-	// ft::vector<int> oui;
-    // ft::vector<int> non (5, 10);
-    ft::vector<string> oui (5, "blabla");
-    // std::vector<int> real(3, 20);
-    // ft::vector<string>::iterator uwu = oui.begin();
-    ft::vector<string>::iterator ok = oui.end();
+    ft::vector<int> oui;
+    for (size_t i = 0; i < 10; i++)
+        oui.push_back(i);
+    // std::vector<int> real;
+    // for (size_t i = 0; i < 10; i++)
+    //     real.push_back(i);
     // string coucou = oui.back();
     try 
     {
-        ok--;
-       cout << *ok << endl;
+        ft::vector<int>::iterator ok = oui.begin();
+        oui.erase(ok);
+        for (size_t i = 0; i < oui.size(); i++)
+            cout << oui[i] << endl;
+        // cout << real.at(0) << endl;
     }
     catch (const exception &o)
     {

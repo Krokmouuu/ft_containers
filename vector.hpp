@@ -33,8 +33,8 @@ namespace ft
             typedef typename allocator_type::const_pointer const_pointer;
             typedef typename ft::classic_iterator<pointer, vector> iterator; 
             typedef typename ft::classic_iterator<const_pointer, vector> const_iterator; 
-            typedef typename ft::reverse_iterator<iterator> reverse_iterator; 
-            typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator; 
+            typedef typename ft::reverse_iterator<pointer> reverse_iterator; 
+            typedef typename ft::reverse_iterator<const_pointer> const_reverse_iterator; 
 
 
             explicit vector(const allocator_type& alloc = allocator_type()) : _start(0), _end(0), _maxcapacity(0), _alloc(alloc) {}
@@ -51,7 +51,7 @@ namespace ft
             // template<class InputIt>
             // vector (InputIt first, InputIt last, const allocator_type &alloc = allocator_type())
             // {
-
+                
             // }
             vector(const vector &params) : _alloc(params._alloc)
             {
@@ -84,12 +84,12 @@ namespace ft
 
             iterator begin()
             {
-                return  iterator(this->_start);
+                return  iterator(this->_start - 1);
             }
 
             const_iterator begin() const
             {
-                return const_iterator(this->_start);
+                return const_iterator(this->_start - 1);
             }
     
             iterator end()
@@ -236,7 +236,7 @@ namespace ft
                     this->_maxcapacity = this->_start + new_cap;
 
                     for (pointer new_capacity = old_start; new_capacity != old_end; new_capacity++)
-                        this->_alloc.construct(++this->_end, *new_capacity);
+                        this->_alloc.construct(this->_end++, *new_capacity);
                     for (size_type len = old_end - old_start; len > 0; len--)
                         this->_alloc.destroy(old_end--);
                     this->_alloc.deallocate(old_start, old_maxcapacity);
@@ -264,13 +264,21 @@ namespace ft
 
             // iterator insert(iterator pos, const value_type &value)
             // {
-
+                
             // }
 
-            // iterator erase(iterator pos)
+            // iterator erase(iterator first, iterator last)
             // {
-
+                
             // }
+
+            iterator erase(iterator pos)
+            {
+                for (iterator cc = pos + 1; cc != end(); cc++)
+                    *(cc - 1) = *cc;
+                this->_alloc.destroy(this->_end--);
+                return (pos);
+            }
 
             void push_back(const value_type &value)
             {
@@ -323,6 +331,17 @@ namespace ft
                 other._maxcapacity = tmp2;
             }
 
+        // template <class InputIterator1, class InputIterator2>
+        // bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2)
+        // {
+        //     while (first1!=last1)
+        //     {
+        //         if (first2==last2 || *first2<*first1) return false;
+        //         else if (*first1<*first2) return true;
+        //         ++first1; ++first2;
+        //     }
+        //     return (first2!=last2);
+        // }
 
         private :
 

@@ -69,4 +69,3 @@ namespace ft {
     struct is_integral<unsigned long> : public type_true {};
 
 };
-
