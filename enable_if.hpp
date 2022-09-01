@@ -68,4 +68,19 @@ namespace ft {
     template<>
     struct is_integral<unsigned long> : public type_true {};
 
+
+    struct nullptr_t 
+    {
+        private:
+            void operator&() const;
+
+        public:
+            template <class T>
+            inline operator T*() const { return 0; }
+
+            template <class C, class T>
+            inline operator T C::*() const { return 0; }
+    };
+    
+    static nullptr_t null_pointer = {};
 };

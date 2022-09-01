@@ -48,11 +48,22 @@ namespace ft
                     this->_alloc.construct(this->_end++, value);
             }
             
-            // template<class InputIt>
-            // vector (InputIt first, InputIt last, const allocator_type &alloc = allocator_type())
-            // {
-                
-            // }
+            template<class InputIt>
+            vector (InputIt first, InputIt last, const allocator_type &alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIt>::valor>::type* = null_pointer)
+            {
+                difference_type n = 0;
+                InputIt save = first;
+                while (first++ < last)
+                    n++;
+                first = save;
+                this->_alloc = alloc;
+                this->_start = this->_alloc.allocate(n);
+                this->_end = this->_start;
+                this->_maxcapacity = this->_start + n;
+                while (n--)
+                    this->_alloc.construct(this->_end++, first++);
+            }
+
             vector(const vector &params) : _alloc(params._alloc)
             {
                 size_type size = params.size();
@@ -197,6 +208,7 @@ namespace ft
             {
                 return this->_start;
             }
+
             bool empty() const
             {
                 if (this->_start == this->_end)
@@ -269,11 +281,34 @@ namespace ft
 
             // iterator erase(iterator first, iterator last)
             // {
-                
+            //     size_type n = &(*last) - &(*first);
+            //     pointer old_start = this->_start;
+            //     pointer old_end = this->_end;
+            //     size_type oldmaxcap = this->capacity();
+            //     iterator savefirst = first;
+            //     iterator savelast = last;
+
+            //     this->_start = this->_alloc.allocate(n);
+            //     this->_end = this->_start;
+            //     this->_maxcapacity = this->_start + n;
+
+            //     for (size_type len = old_end - old_start; len > 0; len--)
+            //             this->_alloc.destroy(old_end--);
+            //     for (iterator uwu = begin(); uwu < first; *uwu++)
+            //         this->_alloc.construct(this->_end++, *old_start++);
+            //     cout << this->size() << endl;
+            //     while (savefirst++ < savelast)
+            //         old_start++;
+            //     for (iterator uwu = end() - 1; uwu > last; uwu--)
+            //         this->_alloc.construct(this->_end++, *old_start++);
+            //     this->_alloc.deallocate(old_start, oldmaxcap);
+            //     return iterator(this->_start);
             // }
 
             iterator erase(iterator pos)
             {
+                if (pos == end())
+                    return end();
                 for (iterator cc = pos + 1; cc != end(); cc++)
                     *(cc - 1) = *cc;
                 this->_alloc.destroy(this->_end--);
