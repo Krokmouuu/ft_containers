@@ -55,7 +55,7 @@ namespace ft
                 difference_type n = 0;
                 InputIt save = first;
                 InputIt tmp = first;
-                while (tmp++ != last)
+                while (tmp++ < last)
                     n++;
                 first = save;
                 this->_alloc = alloc;
@@ -149,11 +149,8 @@ namespace ft
                 this->clear();
                 size_type n = 0;
                 InputIt tmp = first;
-                while (tmp != last)
-                {
-                    tmp++;
+                while (tmp++ < last)
                     n++;
-                }
                 this->_start = this->_alloc.allocate(n);
                 this->_end = this->_start;
                 this->_maxcapacity = this->_start + n;
@@ -295,8 +292,8 @@ namespace ft
 
             void clear()
             {
-                for (size_type len = this->_end - this->_start; len > 0; len--)
-                    this->_alloc.destroy(this->_end--);
+                for (size_t len = this->_end - this->_start; len > 0; len--)
+                    this->_alloc.destroy(--this->_end);
             }
 
             iterator insert(iterator pos, const value_type &value)
@@ -306,12 +303,22 @@ namespace ft
                 newvector.push_back(value);
                 for (; pos_at < this->size(); pos_at++)
                     newvector.push_back(*pos++);
+                this->_alloc.deallocate(this->_start, this->capacity());
                 this->assign(newvector.begin(), newvector.end());
                 return pos;
             }
  
             void insert(iterator pos, size_type n, const value_type& value)
             {
+                if (pos == this->end())
+                {
+                    ft::vector<T> newvector(this->begin(), this->end());
+                    while (n--)
+                        newvector.push_back(value);
+                    this->_alloc.deallocate(this->_start, this->capacity());
+                    this->assign(newvector.begin(), newvector.end());
+                    return;
+                }
                 if (pos == this->begin())
                 {
                     ft::vector<T> newvector;
@@ -319,54 +326,54 @@ namespace ft
                         newvector.push_back(value);
                     while(pos < this->end())
                         newvector.push_back(*pos++);
+                    this->_alloc.deallocate(this->_start, this->capacity());
                     this->assign(newvector.begin(), newvector.end());
                     return ;
                 }
                 ft::vector<T> newvector(this->begin(), pos);
                 while (n--)
                     newvector.push_back(value);
-                iterator oo = pos;
-                while (*pos)
+                while (*pos && pos != end())
                     newvector.push_back(*pos++);
+                this->_alloc.deallocate(this->_start, this->capacity());
                 this->assign(newvector.begin(), newvector.end());
             }
 
             template <class InputIt>
             void insert(iterator pos, InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = null_pointer)
             {
+                size_type n = 0;
+                InputIt tmp = first;
+                while (tmp++ < last)
+                    n++;
+                if (pos == begin() && n != 2)
+                {
+                    ft::vector<T> newvector(first, last);
+                    size_type oldmax = this->_maxcapacity - this->_start;
+                    this->_alloc.deallocate(this->_start, oldmax);
+                    this->assign(newvector.begin(), newvector.end());
+                    return ;
+                }
                 ft::vector<T> newvector(this->begin(), pos);
                 for (; first < last; first++)
                     newvector.push_back(*first);
-                while (*pos)
+                while (*pos && pos != end())
                     newvector.push_back(*pos++);
+                this->_alloc.deallocate(this->_start, this->capacity());
                 this->assign(newvector.begin(), newvector.end());
             }
 
-            // iterator erase(iterator first, iterator last)
-            // {
-            //     size_type n = &(*last) - &(*first);
-            //     pointer old_start = this->_start;
-            //     pointer old_end = this->_end;
-            //     size_type oldmaxcap = this->capacity();
-            //     iterator savefirst = first;
-            //     iterator savelast = last;
-
-            //     this->_start = this->_alloc.allocate(n);
-            //     this->_end = this->_start;
-            //     this->_maxcapacity = this->_start + n;
-
-            //     for (size_type len = old_end - old_start; len > 0; len--)
-            //             this->_alloc.destroy(old_end--);
-            //     for (iterator uwu = begin(); uwu < first; *uwu++)
-            //         this->_alloc.construct(this->_end++, *old_start++);
-            //     cout << this->size() << endl;
-            //     while (savefirst++ < savelast)
-            //         old_start++;
-            //     for (iterator uwu = end() - 1; uwu > last; uwu--)
-            //         this->_alloc.construct(this->_end++, *old_start++);
-            //     this->_alloc.deallocate(old_start, oldmaxcap);
-            //     return iterator(this->_start);
-            // }
+            iterator erase(iterator first, iterator last)
+            {
+                if (first == end())
+                    return end();
+                ft::vector<T> newvector(this->begin(), first);
+                while (first++ < last) {}
+                while (last++ < this->end())
+                    newvector.push_back(*last);
+                this->assign(newvector.begin(), newvector.end());
+                return first;
+            }
 
             iterator erase(iterator pos)
             {
@@ -398,7 +405,7 @@ namespace ft
 
             void resize(size_type count, value_type value = value_type() )
             {
-                if (count <= size())
+                if (count < size())
                 {
                     count = size() - count;
                     while (count--)
