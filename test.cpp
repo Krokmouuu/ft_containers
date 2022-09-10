@@ -48,71 +48,81 @@ void	print(std::vector<T> const &vct, bool cc = true)
 	std::cout << "###############################################" << std::endl;
 }
 
-// void	checkErase(std::vector<string> const &vct,
-// 					std::vector<string>::const_iterator const &it)
-// {
-// 	static int i = 0;
-// 	std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
-// 	printSize(vct);
-// }
+void	checkErase(ft::vector<string> const &vct,
+					ft::vector<string>::const_iterator const &it)
+{
+	static int i = 0;
+	std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
+	printSize(vct);
+}
+
+void	check(std::vector<string> const &vct,
+					std::vector<string>::const_iterator const &it)
+{
+	static int i = 0;
+	std::cout << "[" << i++ << "] " << "erase: " << it - vct.begin() << std::endl;
+	print(vct);
+}
+
 
 void realtest(void)
 {
-	std::vector<int> vct(5);
-	std::vector<int> vct2;
-	const int cut = 3;
+	ft::vector<string> vct(10);
 
 	for (unsigned long int i = 0; i < vct.size(); ++i)
-		vct[i] = (vct.size() - i) * 7;
-	print(vct);
+		vct[i] = std::string((vct.size() - i), i + 65);
+	printSize(vct);
 
-	vct2.insert(vct2.begin(), vct.begin(), vct.begin() + cut);
-	print(vct2);
-	vct2.insert(vct2.begin(), vct.begin() + cut, vct.end());
-	print(vct2);
-	vct2.insert(vct2.end(), vct.begin(), vct.begin() + cut);
-	print(vct2);
+	checkErase(vct, vct.erase(vct.begin() + 2));
 
-	std::cout << "insert return:" << std::endl;
+	checkErase(vct, vct.erase(vct.begin()));
+	checkErase(vct, vct.erase(vct.end() - 1));
 
-	std::cout << *vct2.insert(vct2.end(), 42) << std::endl;
+	checkErase(vct, vct.erase(vct.begin(), vct.begin() + 3));
+	checkErase(vct, vct.erase(vct.end() - 3, vct.end() - 1));
 
-	std::cout << *vct2.insert(vct2.begin() + 5, 84) << std::endl;
-	// std::cout << "----------------------------------------" << std::endl;
+	vct.push_back("Hello");
+	vct.push_back("Hi there");
+	printSize(vct);
+	checkErase(vct, vct.erase(vct.end() - 3, vct.end()));
 
-	// print(vct2);
+	vct.push_back("ONE");
+	vct.push_back("TWO");
+	vct.push_back("THREE");
+	vct.push_back("FOUR");
+	printSize(vct);
+	checkErase(vct, vct.erase(vct.begin(), vct.end()));
 
+	return ;
 }
 
 void		test(void)
 {
-	ft::vector<int> vct(5);
-	ft::vector<int> vct2;
-	const int cut = 3;
-
-	ft::vector<int>::iterator oo = vct2.begin();
+	ft::vector<string> vct(10);
 
 	for (unsigned long int i = 0; i < vct.size(); ++i)
-		vct[i] = (vct.size() - i) * 7;
+		vct[i] = std::string((vct.size() - i), i + 65);
 	printSize(vct);
 
-	vct2.insert(oo + 2, 42);
-	vct2.insert(oo + 2, 42);
-	vct2.insert(oo + 2, 42);
-	vct2.insert(vct2.begin(), vct.begin(), vct.begin() + cut);
-	printSize(vct2);
-	vct2.insert(vct2.begin(), vct.begin() + cut, vct.end());
-	printSize(vct2);
-	vct2.insert(vct2.end(), vct.begin(), vct.begin() + cut);
-	printSize(vct2);
+	checkErase(vct, vct.erase(vct.begin() + 2));
 
-	std::cout << "insert return:" << std::endl;
+	checkErase(vct, vct.erase(vct.begin()));
+	checkErase(vct, vct.erase(vct.end() - 1));
 
-	std::cout << *vct2.insert(vct2.end(), 42) << std::endl;
-	// std::cout << *vct2.insert(vct2.begin() + 5, 84) << std::endl;
-	// std::cout << "----------------------------------------" << std::endl;
+	checkErase(vct, vct.erase(vct.begin(), vct.begin() + 3));
+	checkErase(vct, vct.erase(vct.end() - 3, vct.end() - 1));
 
-	// printSize(vct2);
+	vct.push_back("Hello");
+	vct.push_back("Hi there");
+	printSize(vct);
+	checkErase(vct, vct.erase(vct.end() - 3, vct.end()));
+
+	vct.push_back("ONE");
+	vct.push_back("TWO");
+	vct.push_back("THREE");
+	vct.push_back("FOUR");
+	printSize(vct);
+	checkErase(vct, vct.erase(vct.begin(), vct.end()));
 
 	return ;
 }
@@ -121,7 +131,7 @@ int		main(void)
 {
 	test();
 	cout << endl << endl << "-----------------------------------------" << endl << endl;
-	realtest();
-	// system("leaks std_containers");
+	// realtest();
+	// system("leaks ft_containers");
 	return (0);
 }

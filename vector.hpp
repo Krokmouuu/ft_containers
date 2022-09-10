@@ -365,14 +365,34 @@ namespace ft
 
             iterator erase(iterator first, iterator last)
             {
-                if (first == end())
-                    return end();
-                ft::vector<T> newvector(this->begin(), first);
-                while (first++ < last) {}
-                while (last++ < this->end())
-                    newvector.push_back(*last);
-                this->assign(newvector.begin(), newvector.end());
-                return first;
+                size_type pos_at = &(*first) - this->_start;
+                if (first == this->begin())
+                {
+                    ft::vector<T> newvector(last, this->end());
+                    this->clear();
+                    this->_alloc.deallocate(this->_start, this->capacity());
+                    this->assign(newvector.begin(), newvector.end());
+                    return this->_start + pos_at;
+                }
+                else if (last == this->end() - 1)
+                {
+                    ft::vector<T> newvector(this->begin(), first);
+                    newvector.push_back(*last++);
+                    this->clear();
+                    this->_alloc.deallocate(this->_start, this->capacity());
+                    this->assign(newvector.begin(), newvector.end());
+                    return this->_start + pos_at;
+                }
+                else 
+                {
+                    ft::vector<T> newvector(this->begin(), first);
+                    while (last < this->end())
+                        newvector.push_back(*last);
+                    this->clear();
+                    this->_alloc.deallocate(this->_start, this->capacity());
+                    this->assign(newvector.begin(), newvector.end());
+                    return this->_start + pos_at;
+                }
             }
 
             iterator erase(iterator pos)
