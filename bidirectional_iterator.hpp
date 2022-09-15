@@ -2,7 +2,7 @@
 
 #include "iterator.hpp"
 #include "enable_if.hpp"
-
+#include "compares.hpp"
 namespace ft 
 {
 
@@ -22,7 +22,7 @@ namespace ft
 
 	public:
 
-		bidirectional_iterator(pointer _val = ft::u_nullptr) : _val(_val) {};
+		bidirectional_iterator(pointer _val = NULL) : _val(_val) {};
 
 		bidirectional_iterator(const bidirectional_iterator &params) : _val(params._val) {};
 

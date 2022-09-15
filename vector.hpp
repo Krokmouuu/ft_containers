@@ -6,6 +6,7 @@
 #include "iterator.hpp"
 #include "enable_if.hpp"
 #include "random_access_iterator.hpp"
+#include "compares.hpp"
 
 using std::string;
 using std::exception;
@@ -16,6 +17,7 @@ using std::ptrdiff_t;
 
 //? Ref : https://cplusplus.com/reference/vector/vector/
 //? Ref : https://en.cppreference.com/w/cpp/container/vector
+//? Ref : https://en.cppreference.com/w/cpp/container/vector/operator_cmp
 
 namespace ft
 {
@@ -52,12 +54,7 @@ namespace ft
             template<class InputIt>
             vector (InputIt first, InputIt last, const allocator_type &alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = null_pointer)
             {
-                difference_type n = 0;
-                InputIt save = first;
-                InputIt tmp = first;
-                while (tmp++ < last)
-                    n++;
-                first = save;
+                difference_type n = distance(first, last);
                 this->_alloc = alloc;
                 this->_start = this->_alloc.allocate(n);
                 this->_end = this->_start;
@@ -337,10 +334,7 @@ namespace ft
             template <class InputIt>
             void insert(iterator pos, InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = null_pointer)
             {
-                size_type n = 0;
-                InputIt tmp = first;
-                while (tmp++ < last)
-                    n++;
+                size_type n = distance(first, last);
                 if (pos == begin() && n != 2)
                 {
                     ft::vector<T> newvector(first, last);
@@ -349,7 +343,6 @@ namespace ft
                     this->assign(newvector.begin(), newvector.end());
                     return ;
                 }
-                //! THIS PART NEED FIXS LETS GOOOOOO SOON GOOD
                 ft::vector<T> newvector(this->begin(), pos);
                 for (; first < last; first++)
                     newvector.push_back(*first);
@@ -452,18 +445,6 @@ namespace ft
                 other._maxcapacity = tmp2;
             }
 
-        // template <class InputIterator1, class InputIterator2>
-        // bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2)
-        // {
-        //     while (first1!=last1)
-        //     {
-        //         if (first2==last2 || *first2<*first1) return false;
-        //         else if (*first1<*first2) return true;
-        //         ++first1; ++first2;
-        //     }
-        //     return (first2!=last2);
-        // }
-
         private :
 
             pointer _start;
@@ -471,4 +452,38 @@ namespace ft
             pointer _maxcapacity;
             allocator_type _alloc;
     };
+
+    template <class T, class Alloc>
+    bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+    {
+        if (lhs.size() != rhs.size())
+            return false;
+        return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+    }
+
+    template <class T, class Alloc>
+    bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+    {
+        return (!(lhs == rhs));
+    }
+    template <class T, class Alloc>
+    bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+    {
+        return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+    }
+    template <class T, class Alloc>
+    bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+    {
+        return (!(rhs < lhs));
+    }
+    template <class T, class Alloc>
+    bool operator>(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+    {
+        return (rhs < lhs);
+    }
+    template <class T, class Alloc>
+    bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+    {
+        return (!(lhs < rhs));
+    }
 };
