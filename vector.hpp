@@ -299,13 +299,8 @@ namespace ft
             iterator insert(iterator pos, const value_type &value)
             {
                 size_type pos_at = &(*pos) - this->_start;
-                ft::vector<T> newvector(this->begin(), pos);
-                newvector.push_back(value);
-                for (; pos_at < this->size(); pos_at++)
-                    newvector.push_back(*pos++);
-                this->_alloc.deallocate(this->_start, this->capacity());
-                this->assign(newvector.begin(), newvector.end());
-                return pos;
+                this->insert(pos, 1, value);
+                return (this->_start + pos_at);
             }
  
             void insert(iterator pos, size_type n, const value_type& value)
@@ -354,6 +349,7 @@ namespace ft
                     this->assign(newvector.begin(), newvector.end());
                     return ;
                 }
+                //! THIS PART NEED FIXS LETS GOOOOOO SOON GOOD
                 ft::vector<T> newvector(this->begin(), pos);
                 for (; first < last; first++)
                     newvector.push_back(*first);
