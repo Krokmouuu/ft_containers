@@ -54,7 +54,10 @@ namespace ft
             template<class InputIt>
             vector (InputIt first, InputIt last, const allocator_type &alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = null_pointer)
             {
-                difference_type n = distance(first, last);
+                difference_type n = 0;
+                InputIt tmp = first;
+                while (tmp++ != last)
+                    n++;
                 this->_alloc = alloc;
                 this->_start = this->_alloc.allocate(n);
                 this->_end = this->_start;
@@ -144,9 +147,10 @@ namespace ft
             void assign( InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = null_pointer)
             {
                 this->clear();
+                this->_alloc.deallocate(this->_start, this->capacity());
                 size_type n = 0;
                 InputIt tmp = first;
-                while (tmp++ < last)
+                while (tmp++ != last)
                     n++;
                 this->_start = this->_alloc.allocate(n);
                 this->_end = this->_start;
@@ -307,7 +311,6 @@ namespace ft
                     ft::vector<T> newvector(this->begin(), this->end());
                     while (n--)
                         newvector.push_back(value);
-                    this->_alloc.deallocate(this->_start, this->capacity());
                     this->assign(newvector.begin(), newvector.end());
                     return;
                 }
@@ -318,7 +321,6 @@ namespace ft
                         newvector.push_back(value);
                     while(pos < this->end())
                         newvector.push_back(*pos++);
-                    this->_alloc.deallocate(this->_start, this->capacity());
                     this->assign(newvector.begin(), newvector.end());
                     return ;
                 }
@@ -327,28 +329,27 @@ namespace ft
                     newvector.push_back(value);
                 while (*pos && pos != end())
                     newvector.push_back(*pos++);
-                this->_alloc.deallocate(this->_start, this->capacity());
                 this->assign(newvector.begin(), newvector.end());
             }
 
             template <class InputIt>
             void insert(iterator pos, InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = null_pointer)
             {
-                size_type n = distance(first, last);
+                size_type n = 0;
+                InputIt tmp = first;
+                while (tmp++ != last)
+                    n++;
                 if (pos == begin() && n != 2)
                 {
                     ft::vector<T> newvector(first, last);
-                    size_type oldmax = this->_maxcapacity - this->_start;
-                    this->_alloc.deallocate(this->_start, oldmax);
                     this->assign(newvector.begin(), newvector.end());
                     return ;
                 }
                 ft::vector<T> newvector(this->begin(), pos);
-                for (; first < last; first++)
+                for (; first != last; first++)
                     newvector.push_back(*first);
                 while (*pos && pos != end())
                     newvector.push_back(*pos++);
-                this->_alloc.deallocate(this->_start, this->capacity());
                 this->assign(newvector.begin(), newvector.end());
             }
 
@@ -358,8 +359,6 @@ namespace ft
                 if (first == this->begin())
                 {
                     ft::vector<T> newvector(last, this->end());
-                    this->clear();
-                    this->_alloc.deallocate(this->_start, this->capacity());
                     this->assign(newvector.begin(), newvector.end());
                     return this->_start + pos_at;
                 }
@@ -367,8 +366,6 @@ namespace ft
                 {
                     ft::vector<T> newvector(this->begin(), first);
                     newvector.push_back(*last++);
-                    this->clear();
-                    this->_alloc.deallocate(this->_start, this->capacity());
                     this->assign(newvector.begin(), newvector.end());
                     return this->_start + pos_at;
                 }
@@ -377,8 +374,6 @@ namespace ft
                     ft::vector<T> newvector(this->begin(), first);
                     while (last < this->end())
                         newvector.push_back(*last);
-                    this->clear();
-                    this->_alloc.deallocate(this->_start, this->capacity());
                     this->assign(newvector.begin(), newvector.end());
                     return this->_start + pos_at;
                 }
