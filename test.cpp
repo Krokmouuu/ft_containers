@@ -1,57 +1,77 @@
 #include "vector.hpp"
 #include "vector"
 #include <list>
+#include "stack"
+#include "stack.hpp"
 
-#define T_SIZE_TYPE typename std::vector<T>::size_type
-
-template <typename T>
-void	printSize(ft::vector<T> const &vct, bool print_content = true)
+template <typename T_STACK>
+void	print(T_STACK &stck, bool print_content = 1)
 {
-	const T_SIZE_TYPE size = vct.size();
-	const T_SIZE_TYPE capacity = vct.capacity();
-	const std::string isCapacityOk = (capacity >= size) ? "OK" : "KO";
-	// Cannot limit capacity's max value because it's implementation dependent
-
-	std::cout << "size: " << size << std::endl;
-	std::cout << "capacity: " << isCapacityOk << std::endl;
-	std::cout << "max_size: " << vct.max_size() << std::endl;
+	std::cout << "size: " << stck.size() << std::endl;
 	if (print_content)
 	{
-		typename ft::vector<T>::const_iterator it = vct.begin();
-		typename ft::vector<T>::const_iterator ite = vct.end();
-		std::cout << std::endl << "Content is:" << std::endl;
-		for (; it != ite; ++it)
-			std::cout << "- " << *it << std::endl;
+		std::cout << std::endl << "Content was:" << std::endl;
+		while (stck.size() != 0) {
+			std::cout << "- " << stck.top() << std::endl;
+			stck.pop();
+		}
 	}
 	std::cout << "###############################################" << std::endl;
 }
 
-template <typename T>
-void	print(std::vector<T> const &vct, bool cc = true)
-{
-	const T_SIZE_TYPE size = vct.size();
-	const T_SIZE_TYPE capacity = vct.capacity();
-	const std::string isCapacityOk = (capacity >= size) ? "OK" : "KO";
-	// Cannot limit capacity's max value because it's implementation dependent
 
-	std::cout << "size: " << size << std::endl;
-	std::cout << "capacity: " << isCapacityOk << std::endl;
-	std::cout << "max_size: " << vct.max_size() << std::endl;
-	if (cc)
+template <typename T_STACK>
+void	printSize(T_STACK &stck, bool print_content = 1)
+{
+	std::cout << "size: " << stck.size() << std::endl;
+	if (print_content)
 	{
-		typename std::vector<T>::const_iterator it = vct.begin();
-		typename std::vector<T>::const_iterator ite = vct.end();
-		std::cout << std::endl << "Content is:" << std::endl;
-		for (; it != ite; ++it)
-			std::cout << "- " << *it << std::endl;
+		std::cout << std::endl << "Content was:" << std::endl;
+		while (stck.size() != 0) {
+			std::cout << "- " << stck.top() << std::endl;
+			stck.pop();
+		}
 	}
 	std::cout << "###############################################" << std::endl;
 }
 
-void realtest(void)
-{
-	return ;
-}
+// void realtest(void)
+// {
+// 	std::stack<int>	ctnr;
+
+// 	ctnr.push_back(21);
+// 	ctnr.push_back(42);
+// 	ctnr.push_back(1337);
+// 	ctnr.push_back(19);
+// 	ctnr.push_back(0);
+// 	ctnr.push_back(183792);
+
+// 	std::stack<int>	stck(ctnr);
+// 	std::stack<int>	stck2(cntr);
+
+// 	cmp(stck, stck);  // 0
+// 	cmp(stck, stck2); // 1
+
+// 	stck2.push(60);
+// 	stck2.push(61);
+// 	stck2.push(62);
+
+// 	cmp(stck, stck2); // 2
+// 	cmp(stck2, stck); // 3
+
+// 	stck.push(42);
+
+// 	cmp(stck, stck2); // 4
+// 	cmp(stck2, stck); // 5
+
+// 	stck.push(100);
+
+// 	cmp(stck, stck2); // 6
+// 	cmp(stck2, stck); // 7
+	
+// 	return ;
+// }
+
 
 void test(void)
 {
@@ -60,9 +80,10 @@ void test(void)
 
 int		main(void)
 {
-	// test();
-	// cout << endl << endl << "-----------------------------------------" << endl << endl;
+	test();
+	cout << endl << endl << "-----------------------------------------" << endl << endl;
 	// realtest();
 	system("leaks ft_containers");
 	return (0);
 }
+a

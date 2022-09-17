@@ -132,17 +132,6 @@ namespace ft
                 return reverse_iterator(this->_start);
             } 
 
-            size_type distance(iterator it, iterator it2)
-            {
-                size_type n = 0;
-                while (it != it2)
-                {
-                    it++;
-                    n++;
-                }
-                return n;
-            }
-
             template< class InputIt >
             void assign( InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = null_pointer)
             {
@@ -248,14 +237,7 @@ namespace ft
 
             size_type size() const
             {
-                size_type n = 0;
-                pointer tmp = this->_start;
-                while (tmp != this->_end)
-                {
-                    tmp++;
-                    n++;
-                }
-                return n;
+                return (this->_end - this->_start);
             }
 
             size_type max_size() const
@@ -280,7 +262,7 @@ namespace ft
                     for (pointer new_capacity = old_start; new_capacity != old_end; new_capacity++)
                         this->_alloc.construct(this->_end++, *new_capacity);
                     for (size_type len = old_end - old_start; len > 0; len--)
-                        this->_alloc.destroy(old_end--);
+                        this->_alloc.destroy(--old_end);
                     this->_alloc.deallocate(old_start, old_maxcapacity);
                 }
                 return ;
@@ -440,7 +422,7 @@ namespace ft
                 other._maxcapacity = tmp2;
             }
 
-        private :
+        protected :
 
             pointer _start;
             pointer _end;
