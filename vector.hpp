@@ -3,10 +3,10 @@
 #include <iostream>
 #include "limits.h"
 #include <memory>
-#include "iterator.hpp"
-#include "enable_if.hpp"
-#include "random_access_iterator.hpp"
-#include "compares.hpp"
+#include "Iterators/iterator.hpp"
+#include "Utilities/enable_if.hpp"
+#include "Iterators/random_access_iterator.hpp"
+#include "Utilities/compares.hpp"
 
 using std::string;
 using std::exception;
