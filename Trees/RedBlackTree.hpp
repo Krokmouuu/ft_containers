@@ -8,6 +8,8 @@ using std::string;
 using std::cout;
 using std::endl;
 
+//? Ref : https://programmer.ink/think/use-a-red-black-tree-to-encapsulate-set-and-map-at-the-same-time.html
+
 namespace ft
 {
 	enum Color
@@ -295,10 +297,7 @@ namespace ft
 		void Destory(Node* root)
 		{
 			if (root == nullptr)
-			{
 				return;
-			}
-
 			Destory(root->_left);
 			Destory(root->_right);
 			delete root;
@@ -337,19 +336,12 @@ namespace ft
 			if (root == nullptr)
 			{
 				if (count != blackNum)
-				{
-					cout << "黑色节点的数量不相等" << endl;
 					return false;
-				}
-
 				return true;
 			}
 
 			if (root->_color == RED && root->_parent->_color == RED)
-			{
-				cout << "存在连续的红色节点" << endl;
 				return false;
-			}
 
 			if (root->_color == BLACK)
 			{
@@ -368,7 +360,6 @@ namespace ft
 			}
 			if (_root->_color == RED)
 			{
-				cout << "根节点是红色的" << endl;
 				return false;
 			}
 			int blackNum = 0;

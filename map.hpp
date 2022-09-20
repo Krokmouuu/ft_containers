@@ -65,18 +65,18 @@ namespace ft
             map() : _t() {}
             explicit map(const Compare& comp,const Allocator& alloc = Allocator()) : _t(comp, alloc) {}
 
-            // template< class InputIt >
-            // map( InputIt first, InputIt last,const Compare& comp = Compare(),const Allocator& alloc = Allocator() ) : _t(comp, alloc)
-            // {
-            //     insert(first, last);
-            // }
-            // map( const map& params ) : _t(params._t) {}
-            // map operator=(const map &params)
-            // {
-            //     if (this != &params)
-            //         _t = params._t;
-            //     return *this;
-            // }
+            template< class InputIt >
+            map( InputIt first, InputIt last,const Compare& comp = Compare(),const Allocator& alloc = Allocator() ) : _t(comp, alloc)
+            {
+                insert(first, last);
+            }
+            map( const map& params ) : _t(params._t) {}
+            map operator=(const map &params)
+            {
+                if (this != &params)
+                    _t = params._t;
+                return *this;
+            }
             virtual ~map() {};
 
             iterator begin()
