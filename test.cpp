@@ -49,6 +49,11 @@ int main()
 {
     ft::map<int, int> coucou;
     coucou.insert(ft::make_pair(1, 3));
+    coucou.insert(ft::make_pair(10, 15));
+    coucou.insert(ft::make_pair(5, 155));
+    coucou.insert(ft::make_pair(67, 43));
+    coucou.insert(ft::make_pair(4, 436));
+    coucou.insert(ft::make_pair(42, 1));
     ft::map<int, int>::iterator cc = coucou.begin();
 
     cout << cc->first << cc->second << endl;

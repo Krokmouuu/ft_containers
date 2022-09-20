@@ -10,8 +10,6 @@ using std::endl;
 
 namespace ft
 {
-	using namespace std;
-
 	enum Color
 	{
 		RED,
@@ -34,6 +32,7 @@ namespace ft
 			,_color(RED)
 			{}
 	};
+	using namespace std;
 	template<class T,class Ref,class Ptr>
 	struct _TreeIterator
 	{

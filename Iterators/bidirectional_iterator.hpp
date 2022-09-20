@@ -6,7 +6,6 @@
 
 namespace ft 
 {
-
 	template <class T>
 	class bidirectional_iterator : public ft::iterator<ft::bidirectional_iterator_tag, T> 
 	{
