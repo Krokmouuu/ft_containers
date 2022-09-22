@@ -8,7 +8,7 @@ using std::string;
 using std::cout;
 using std::endl;
 
-//? Ref : https://programmer.ink/think/use-a-red-black-tree-to-encapsulate-set-and-map-at-the-same-time.html
+//? Ref :http://www.aoc.nrao.edu/php/tjuerges/ALMA/STL/html-4.1.2/stl__tree_8h-source.html
 
 namespace ft
 {
@@ -17,386 +17,234 @@ namespace ft
 		RED,
 		BLACK
 	};
-	template<class T, class Allocator = std::allocator<T> >
-	struct RBTreeNode
+
+	template <class T, class Allocator>
+	struct Tree_node
 	{
-		RBTreeNode<T>* _left;
-		RBTreeNode<T>* _right;
-		RBTreeNode<T>* _parent;
-		
-		T _data;
-		Color _color;
-		RBTreeNode(const T& data)
-			:_left(nullptr)
-			,_right(nullptr)
-			,_parent(nullptr)
-			,_data(data)
-			,_color(RED)
-			{}
+		public :
+
+			Tree_node(T data)
+			{
+				_color = RED;
+				parent = nullptr;
+				child_right = nullptr;
+				child_left = nullptr;
+				value = _alloc.allocate(1);
+				_alloc.construct(this->value, T(data.first, data.second));
+			}
+
+			Tree_node(const T &data)
+			{
+				_color = data._color;
+				parent = data.parent;
+				child_right = data.child_right;
+				child_left = data.child_left;
+				value = _alloc.allocate(1);
+				_alloc.construct(value, data.value);
+			}
+
+			~Tree_node()
+			{
+				if (value)
+				{
+					_alloc.destroy(value);
+					_alloc.deallocate(value, 1);
+				}
+			}
+
+			Tree_node &operator==(const T &data)
+			{
+				if (this != &data)
+				{
+					_color = data._color;
+					parent = data.parent;
+					child_left = data.child_left;
+					child_right = data.child_right;
+					value = _alloc.allocate(1);
+					_alloc.construct(value, data.value);
+				}
+				return *this;
+			}
+
+		protected :
+
+			bool _color;
+			Allocator _alloc;
+			T *value;
+			Tree_node* parent;
+			Tree_node* child_right;
+			Tree_node* child_left;
+
 	};
-	using namespace std;
-	template<class T,class Ref,class Ptr>
-	struct _TreeIterator
+
+	template<typename T>
+	struct RBTree_iterator
 	{
-		typedef RBTreeNode<T> Node;
-		typedef _TreeIterator<T, Ref, Ptr> Self;
-		Node* _node;
-		_TreeIterator(Node* node)
-			:_node(node)
-		{}
-		Ref operator*()
-		{
-			return _node->_data;
-		}
-		Ptr operator ->()
-		{
-			return &_node->_data;
-		}
-		bool  operator !=(const Self& s) const
-		{
-			return _node != s._node;
-		}
-		bool  operator ==(const Self& s) const
-		{
-			return _node == s._node;
-		}
-		Self& operator++()
-		{
-			if (_node->_right)
+		public :
+
+			typedef T value_type;
+			typedef T& reference;
+			typedef T* pointer;
+			typedef ft::bidirectional_iterator_tag iterator_category;
+			typedef ptrdiff_t difference_type;
+			typedef RBTree_iterator<T> RBTiter;
+			typedef typename Tree_node<T, std::allocator<T> >::node node;
+
+
+			RBTree_iterator() : _current_node() {}
+
+			explicit RBTree_iterator(node data) : _current_node(data) {}
+
+			RBTree_iterator(const RBTiter &data) : _current_node(data._current_node) {}
+
+			RBTiter &operator=(const RBTiter data)
 			{
-				Node* left = _node->_right;
-				while (left->_left)
-				{
-					left = left->_left;
-				}
-					_node = left;
-				}
-				else
-				{
-					Node* cur = _node;
-					Node* parent = cur->_parent;
-					while (parent && cur == parent->_right)
-					{
-						cur = cur->_parent;
-						parent = parent->_parent;
-					}
-					_node = parent;
-				}
-			return *this;
-		}
-		Self& operator--()
-		{
-			if (_node->_left)
-			{
-				Node* right = _node->_right;
-				while (right->_right)
-				{
-					right = right->_right;
-				}
-				_node = right;
+				if (this != &data)
+					_current_node = data._current_node;
+				return *this;
 			}
-			else
+			
+			virtual ~RBTree_iterator() {}
+
+			RBTiter &operator++()
 			{
-				Node* cur = _node;
-				Node* parent = cur->_parent;
-				while (parent && cur == parent->_left)
-				{
-					cur = cur->_parent;
-					parent = parent->_parent;
-				}
-				_node = parent;
+				_current_node = RBTree_increment(_current_node);
+				return *this;
 			}
-			return *this;
-		}
+
+			RBTiter operator++(int)
+			{
+				RBTiter tmp = *this;
+				_current_node = RBTree_increment(_current_node);
+				return tmp;
+			}
+
+			RBTiter &operator--()
+			{
+				_current_node = RBTree_decrement(_current_node);
+				return *this;
+			}
+			RBTiter &operator--(int)
+			{
+				RBTiter tmp = *this;
+				_current_node = RBTree_decrement(_current_node);
+				return tmp;
+			}
+
+			reference operator*() const
+			{
+				return *_current_node->value;
+			}
+			
+			const pointer operator->() const
+			{
+				return &(operator*());
+			}
+
+			bool operator==(const RBTiter& x) const
+			{
+				return _current_node == x._current_node;
+			}
+
+    		bool operator!=(const RBTiter& x) const 
+			{ 
+				return _current_node != x._current_node;
+			}
+
+		protected :
+
+		node _current_node;
 	};
-	template<class K, class T, class KeyOfT>
-	class RBTree
+
+	template<typename T>
+	struct RBTree_const_iterator
 	{
-		typedef RBTreeNode<T> Node;
-		public:
-		RBTree()
-			: _root(nullptr)
-		{}
+		public :
 
-		typedef _TreeIterator<T, T&, T*> iterator;
-		
-		
-		iterator begin()
-		{
-			Node* left = _root;
-			while (left && left->_left)
+			typedef T value_type;
+			typedef T& reference;
+			typedef T* pointer;
+			typedef ft::bidirectional_iterator_tag iterator_category;
+			typedef ptrdiff_t difference_type;
+			typedef RBTree_iterator<T> RBTiter_const;
+			typedef typename Tree_node<T, std::allocator<T> >::node node;
+
+
+			RBTree_const_iterator() : _current_node() {}
+
+			explicit RBTree_const_iterator(node data) : _current_node(data) {}
+
+			RBTree_const_iterator(const RBTiter_const &data) : _current_node(data._current_node) {}
+
+			RBTree_const_iterator &operator=(const RBTiter_const &data)
 			{
-				left = left->_left;
-			}
-			return iterator(left);
-		}
-
-		iterator end()
-		{
-			return iterator(nullptr);
-		}
-
-		pair <iterator, bool>insert(const T& data)
-		{
-			if (_root == nullptr)
-			{
-				_root = new Node(data);
-				_root->_color = BLACK;
-				return ft::make_pair(iterator(_root), true);
+				if (this != &data)
+					_current_node = data._current_node;
+				return *this;
 			}
 
-			KeyOfT  koft;
-			Node* cur = _root;
-			Node* parent = nullptr;
-			while (cur)
-			{
-				if (koft(cur->_data) < koft(data))
-				{
-					parent = cur;
-					cur = cur->_right;
-				}
-				else if (koft(cur->_data) > koft(data))
-				{
-					parent = cur;
-					cur = cur->_left;
-				}
-				else
-				{
-					return ft::make_pair(iterator(cur), false);
-				}
-			}
-			cur = new Node(data);
-			Node* newnode = cur;
-			newnode->_color = RED;
-			if (koft(parent->_data) < koft(data))
-			{
-				parent->_right = newnode;
-				newnode->_parent = parent;
-			}
-			else
-			{
-				parent->_left = newnode;
-				newnode->_parent = parent;
-			}
-			while (parent && parent->_color == RED)
-			{
-				Node* grandParent = parent->_parent;		
-				if (grandParent->_left == parent)
-				{
-					Node* uncle = grandParent->_right;
-					if (uncle && uncle->_color == RED)
-					{
-						parent->_color = BLACK;
-						uncle->_color = BLACK;
-						grandParent->_color = RED;
-						cur = grandParent;
-						parent = cur->_parent;
-					}
-					else
-					{
-						if (parent->_left == cur)
-						{
-							RotateR(grandParent);
-							parent->_color = BLACK;
-							grandParent->_color = RED;
-						}
-						else
-						{
-							RotateL(parent);
-							RotateR(grandParent);
-							grandParent->_color = RED;
-							cur->_color = BLACK;
-						}
-						break;
-					}
-				}
-				else
-				{
-					Node* uncle = grandParent->_left;
-					if (uncle && uncle->_color == RED)
-					{
-						uncle->_color = BLACK;
-						parent->_color = BLACK;
-						grandParent->_color = RED;
-						cur = grandParent;
-						parent = cur->_parent;
-					}
-					else
-					{
-						if (parent->_right == cur)
-						{
-							RotateL(grandParent);
-							parent->_color = BLACK;
-							grandParent->_color = RED;
-						}
-						else
-						{
-							RotateR(parent);
-							RotateL(grandParent);
-							cur->_color = BLACK;
-							grandParent->_color = RED;
-						}
-						break;
-					}	
-				}
-			}
-			_root->_color = BLACK;
-			return ft::make_pair(iterator(newnode), true);
-		}
-		void RotateL(Node* parent)
-		{
-			Node* subR = parent->_right;
-			Node* subRL = subR->_left;
-			Node* parentParent = parent->_parent;
+			virtual ~RBTree_const_iterator() {}
 
-			parent->_right = subRL;
-			subR->_left = parent;
-			parent->_parent = subR;
-			if (subRL)
-				subRL->_parent = parent;
-			if (_root == parent)
+			reference operator*() const
 			{
-				_root = subR;
-				_root->_parent = nullptr;
-			}
-			else
-			{
-				if (parentParent->_left == parent)
-					parentParent->_left = subR;
-				else
-					parentParent->_right = subR;
-				subR->_parent = parentParent;
-			}
-		}
-		void RotateR(Node* parent)
-		{
-			Node* subL = parent->_left;
-			Node* subLR = subL->_right;
-			Node* parentParent = parent->_parent;
-	
-			parent->_left = subLR;
-			subL->_right = parent;
-			if (subLR)
-				subLR->_parent = parent;
-			parent->_parent = subL;
-			if (_root == parent)
-			{
-				_root = subL;
-				_root->_parent = nullptr;
+				return *_current_node->value;
 			}
 
-			else
+			const pointer operator->() const
 			{
-				if (parentParent->_left == parent)
-					parentParent->_left = subL;
-				else
-					parentParent->_right = subL;
-				subL->_parent = parentParent;
-			}
-		}
-		void Destory(Node* root)
-		{
-			if (root == nullptr)
-				return;
-			Destory(root->_left);
-			Destory(root->_right);
-			delete root;
-		}
-
-		~RBTree()
-		{
-			Destory(_root);
-			_root = nullptr;
-		}
-
-		iterator Find(const K& key)
-		{
-			KeyOfT koft;
-			Node* cur = _root;
-			while (cur)
-			{
-				if (koft(cur->_data) > key)
-				{
-					cur = cur->_left;
-				}
-				else if (koft(cur->_data) < key)
-				{
-					cur = cur->_right;
-				}
-				else
-				{
-					return iterator(cur);
-				}
-			}
-			return end();
-		}
-
-		bool _CheckBlance(Node* root,int blackNum, int count)
-		{
-			if (root == nullptr)
-			{
-				if (count != blackNum)
-					return false;
-				return true;
+				return &(operator*());
 			}
 
-			if (root->_color == RED && root->_parent->_color == RED)
-				return false;
-
-			if (root->_color == BLACK)
+			RBTiter_const &operator++()
 			{
-				count++;
+				_current_node = tree_increment(_current_node);
+				return *this;
 			}
 
-			return _CheckBlance(root->_left, blackNum, count)
-				&& _CheckBlance(root->_right, blackNum, count);
-		}
-
-		bool CheckBlance()
-		{
-			if (_root == nullptr)
+			RBTiter_const operator++(int)
 			{
-				return true;
-			}
-			if (_root->_color == RED)
-			{
-				return false;
-			}
-			int blackNum = 0;
-			Node* left = _root;
-			while (left)
-			{
-				if (left->_color == BLACK)
-				{
-					blackNum++;
-				}
-
-				left = left->_left;
+				RBTiter_const tmp = *this;
+				_current_node = tree_increment(_current_node);
+				return tmp;
 			}
 
-			int count = 0;
-			return _CheckBlance(_root, blackNum, count);
-		}
-
-		void _InOrder(Node* root)
-		{
-			if (root == nullptr)
+			RBTiter_const &operator--()
 			{
-				return;
+				_current_node = tree_decrement(_current_node);
+				return *this;
 			}
 
-			_InOrder(root->_left);
-			cout << root->_kv.first << ":"<<root->_kv.second<<endl;
-			_InOrder(root->_right);
-		}
+			RBTiter_const operator--(int)
+			{
+				RBTiter_const tmp = *this;
+				_current_node = tree_decrement(_current_node);
+				return *this;
+			}
 
-		void InOrder()
-		{
-			_InOrder(_root);
-			cout << endl;
-		}
+			bool operator==(const RBTiter_const &x) const
+			{
+				return _current_node == x._current_node;
+			}
 
-		private:
-			Node* _root;
+			bool operator!=(const RBTiter_const &x) const
+			{
+				return _current_node != x._current_node;
+			}
+
+		protected :
+
+			node _current_node;
 	};
+
+	template<typename uwu>
+	inline bool operator==(const RBTree_iterator<uwu> &x, const RBTree_const_iterator<uwu> &y)
+	{
+		return x._current_node == y._current_node;
+	}
+
+	template<typename uwu>
+	inline bool operator!=(const RBTree_iterator<uwu> &x, const RBTree_const_iterator<uwu> &y)
+	{
+		return x._current_node != y._current_node;
+	}
 };

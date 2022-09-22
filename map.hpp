@@ -1,11 +1,13 @@
 #pragma once
 
+#include <iostream>
 #include <functional>
 #include <memory>
 #include <limits>
 #include "Iterators/iterator.hpp"
 #include "Iterators/random_access_iterator.hpp"
 #include "Trees/RedBlackTree.hpp"
+#include "Utilities/pair.hpp"
 
 using std::string;
 using std::cout;
@@ -38,7 +40,7 @@ namespace ft
             typedef const value_type& const_reference;
             typedef typename allocator_type::pointer pointer;
             typedef typename allocator_type::const_pointer const_pointer;
-            typedef typename RBTree<Key, ft::pair<const Key, T>, MapKeyOfT>::iterator iterator;
+            typedef typename ft::random_access_iterator<value_type> iterator;
             typedef typename ft::random_access_iterator<const value_type> const_iterator;
             typedef typename ft::reverse_iterator<iterator> reverse_iterator;
             typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
@@ -46,68 +48,104 @@ namespace ft
             //? Ref : https://en.cppreference.com/w/cpp/container/map/value_compare
             //? Ref : https://en.cppreference.com/w/cpp/utility/functional/binary_function
 
-            class value_compare : std::binary_function<value_type, value_type, bool>
-            {
-                friend class map;
-                protected :
+    //         class value_compare : std::binary_function<value_type, value_type, bool>
+    //         {
+    //             friend class map;
+    //             protected :
 
-                    key_compare comp;
-                    value_compare(key_compare c) : comp(c) {}
+    //                 key_compare comp;
+    //                 value_compare(key_compare c) : comp(c) {}
 
-                public :
+    //             public :
 
-                    bool operator()( const value_type& lhs, const value_type& rhs ) const
-                    {
-                        return comp(lhs.first, rhs.first);
-                    }
-            };
+    //                 bool operator()( const value_type& lhs, const value_type& rhs ) const
+    //                 {
+    //                     return comp(lhs.first, rhs.first);
+    //                 }
+    //         };
 
-            map() : _t() {}
-            explicit map(const Compare& comp,const Allocator& alloc = Allocator()) : _t(comp, alloc) {}
+    //         //! Consctructors
+    //         map() : _t(), __alloc() {}
+    //         explicit map(const Compare& comp,const Allocator& alloc = Allocator()) : _t(), __alloc(alloc)
+    //         {
+    //             (void) comp;
+    //         }
 
-            template< class InputIt >
-            map( InputIt first, InputIt last,const Compare& comp = Compare(),const Allocator& alloc = Allocator() ) : _t(comp, alloc)
-            {
-                insert(first, last);
-            }
-            map( const map& params ) : _t(params._t) {}
-            map operator=(const map &params)
-            {
-                if (this != &params)
-                    _t = params._t;
-                return *this;
-            }
-            virtual ~map() {};
+    //         template< class InputIt >
+    //         map( InputIt first, InputIt last,const Compare& comp = Compare(),const Allocator& alloc = Allocator() ) : _t(), __alloc(alloc)
+    //         {
+    //             (void) comp;
+    //             (void) alloc;
+    //             (void) first;
+    //             (void) last;
+    //             // insert(first, last);
+    //         }
 
-            iterator begin()
-            {
-                return _t.begin();
-            }
+    //         //! Consctructors copy
+    //         map( const map& params ) : _t(params._t) {}
+    //         map operator=(const map &params)
+    //         {
+    //             if (this != &params)
+    //                 _t = params._t;
+    //             return *this;
+    //         }
+    //         virtual ~map() {};
+
+    //         allocator_type get_allocator() const
+    //         {
+    //             return this->__alloc;
+    //         }
+
+    //         iterator begin()
+    //         {
+    //             return _t.begin();
+    //         }
             
-            iterator end()
-            {
-                return _t.end();
-            }
+    //         iterator end()
+    //         {
+    //             return _t.end();
+    //         }
 
-            ft::pair<iterator,bool> insert(const ft::pair<const Key, T>& kv)
-            {
-                return _t.insert(kv);
-            }
+    //         iterator end() const
+    //         {
+    //             return _t.end();
+    //         }
 
-            T& operator[](const Key& key)
-            {
-                ft::pair<iterator, bool> ret = Insert(ft::make_pair(key, T()));
-                iterator it = ret.first;
-                return it->second;
-            }
+    //         ft::pair<iterator,bool> insert(const ft::pair<const Key, T>& kv)
+    //         {
+    //             return _t.insert(kv);
+    //         }
 
-            iterator find(const Key& key)
-            {
-                return _t.Find(key);
-            }
+    //         T& at( const Key& key )
+    //         {
+    //             ft::pair<iterator, bool> ret = insert(ft::make_pair(key, T()));
+    //             iterator it = ret.first;
+    //             return it->second;
+    //         }
 
-        protected :
+    //         // const T& at( const Key& key ) const
+    //         // {
+    //         //     if (_t.Find(key) == end())
+    //         //         throw std::out_of_range("Out of Range");
+    //         //     else
+    //         //         return _t.Find(key);
+    //         // }
 
-            RBTree<Key, ft::pair<const Key, T>, MapKeyOfT> _t;
+    //         T& operator[](const Key& key)
+    //         {
+    //             ft::pair<iterator, bool> ret = insert(ft::make_pair(key, T()));
+    //             iterator it = ret.first;
+    //             return it->second;
+    //         }
+
+    //         iterator find(const Key& key)
+    //         {
+    //             return _t.Find(key);
+    //         }
+
+    //     protected :
+
+    //         RBTree<Key, ft::pair<const Key, T>, MapKeyOfT> _t;
+    //         allocator_type __alloc;
     };
-}
+};
