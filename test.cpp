@@ -1,8 +1,9 @@
 #include "map.hpp"
 // #include <map>
+
 // void realtest(void)
 // {
-// 	std::map<std::string, int> mapOfWords;
+// 	std::map<std::string, int_least32_t> mapOfWords;
 //     // Inserting data in std::map
 //     mapOfWords.insert(std::make_pair("earth", 1));
 //     mapOfWords.insert(std::make_pair("moon", 2));
@@ -31,21 +32,21 @@
 // }
 
 
-// void test(void)
-// {
-// 	ft::map<string, int> coucou;
-//     // coucou.insert(ft::make_pair("earth", 3));
-//     // coucou.insert(ft::make_pair("sun", 3));
-//     // // ft::map<string,int>::iterator haha = coucou.find("earth");
+void test(void)
+{
+	ft::map<string, int> coucou;
+    // coucou.insert(ft::make_pair("earth", 1));
+    // coucou.insert(ft::make_pair("sun", 3));
+    // // ft::map<string,int>::iterator haha = coucou.find("earth");
 
 
-//     // cout << coucou.at("earth") << endl;
-//     return ;
-// }
+    // cout << coucou.at("earth") << endl;
+    return ;
+}
 
 int main() 
 {
-    // test();
+    test();
     cout << "------------------------------------" << endl;
     // realtest();
     return 0;

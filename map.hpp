@@ -7,6 +7,7 @@
 #include "Iterators/iterator.hpp"
 #include "Iterators/random_access_iterator.hpp"
 #include "Trees/RedBlackTree.hpp"
+#include "Trees/RedBlackTree.hpp"
 #include "Utilities/pair.hpp"
 
 using std::string;
@@ -17,7 +18,7 @@ using std::endl;
 
 namespace ft
 {
-    template<class Key,class T,class Compare = std::less<Key>, class Allocator = std::allocator<std::pair<const Key, T> > >
+    template<class Key,class T,class Compare = std::less<Key>, class Allocator = std::allocator<ft::pair<const Key, T> > >
     class map
     {
         public :
@@ -65,56 +66,52 @@ namespace ft
     //         };
 
     //         //! Consctructors
-    //         map() : _t(), __alloc() {}
-    //         explicit map(const Compare& comp,const Allocator& alloc = Allocator()) : _t(), __alloc(alloc)
-    //         {
-    //             (void) comp;
-    //         }
-
-    //         template< class InputIt >
-    //         map( InputIt first, InputIt last,const Compare& comp = Compare(),const Allocator& alloc = Allocator() ) : _t(), __alloc(alloc)
-    //         {
-    //             (void) comp;
-    //             (void) alloc;
-    //             (void) first;
-    //             (void) last;
-    //             // insert(first, last);
-    //         }
+            map() : _m()  {}
+            explicit map(const Compare& comp,const Allocator& alloc = Allocator()) : _m(comp, alloc) {}
+            // template< class InputIt >
+            // map( InputIt first, InputIt last,const Compare& comp = Compare(),const Allocator& alloc = Allocator() ) : _m(), __alloc(alloc)
+            // {
+            //     (void) comp;
+            //     (void) alloc;
+            //     (void) first;
+            //     (void) last;
+            //     // insert(first, last);
+            // }
 
     //         //! Consctructors copy
-    //         map( const map& params ) : _t(params._t) {}
-    //         map operator=(const map &params)
-    //         {
-    //             if (this != &params)
-    //                 _t = params._t;
-    //             return *this;
-    //         }
-    //         virtual ~map() {};
+            map( const map& params ) : _m(params._m) {}
+            map operator=(const map &params)
+            {
+                if (this != &params)
+                    _m = params._m;
+                return *this;
+            }
+            virtual ~map() {};
 
-    //         allocator_type get_allocator() const
-    //         {
-    //             return this->__alloc;
-    //         }
+            allocator_type get_allocator() const
+            {
+                return _m.get_allocator();
+            }
 
-    //         iterator begin()
-    //         {
-    //             return _t.begin();
-    //         }
+            iterator begin()
+            {
+                return _m.begin();
+            }
             
-    //         iterator end()
-    //         {
-    //             return _t.end();
-    //         }
+            iterator end()
+            {
+                return _m.end();
+            }
 
-    //         iterator end() const
-    //         {
-    //             return _t.end();
-    //         }
+            iterator end() const
+            {
+                return _m.end();
+            }
 
-    //         ft::pair<iterator,bool> insert(const ft::pair<const Key, T>& kv)
-    //         {
-    //             return _t.insert(kv);
-    //         }
+            ft::pair<iterator,bool> insert(const ft::pair<const Key, T>& kv)
+            {
+                return _m.insert(kv);
+            }
 
     //         T& at( const Key& key )
     //         {
@@ -125,10 +122,10 @@ namespace ft
 
     //         // const T& at( const Key& key ) const
     //         // {
-    //         //     if (_t.Find(key) == end())
+    //         //     if (_m.Find(key) == end())
     //         //         throw std::out_of_range("Out of Range");
     //         //     else
-    //         //         return _t.Find(key);
+    //         //         return _m.Find(key);
     //         // }
 
     //         T& operator[](const Key& key)
@@ -140,12 +137,13 @@ namespace ft
 
     //         iterator find(const Key& key)
     //         {
-    //             return _t.Find(key);
+    //             return _m.Find(key);
     //         }
 
     //     protected :
 
-    //         RBTree<Key, ft::pair<const Key, T>, MapKeyOfT> _t;
+           typedef RBTree<key_type, value_type, key_compare, Allocator>  m_type;
+           m_type _m;
     //         allocator_type __alloc;
     };
 };
