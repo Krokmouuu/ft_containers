@@ -13,8 +13,8 @@ namespace ft
             typedef T1 first_type;
             typedef T2 second_type;
 
-            first_type first;
-            first_type second;
+            T1 first;  //! first_type first NOT WORKING ?????
+            T2 second; //! second_type second NOT WORKING ?????
 
             pair() : first(), second() {}
             pair(const T1& x, const T2& y) : first(x), second(y) {}
@@ -31,7 +31,6 @@ namespace ft
                 }
                 return *this;
             }
-        ft::pair<T1, T2> make_pair(T1 t, T2 u);
     };
 
     template< class T1, class T2 >
@@ -55,7 +54,7 @@ namespace ft
     template< class T1, class T2 >
     bool operator<( const pair<T1,T2>& lhs, const pair<T1,T2>& rhs )
     {
-        return lhs.first < rhs.first && lhs.second < rhs.second;
+        return lhs.first < rhs.first || lhs.second < rhs.second;
     }
 
     template< class T1, class T2 >

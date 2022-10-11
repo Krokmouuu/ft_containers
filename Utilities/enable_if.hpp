@@ -1,11 +1,11 @@
 #pragma once
 
+#include "../Iterators/iterator.hpp"
+
 //? Ref : https://en.cppreference.com/w/cpp/types/enable_if
 //? Ref : https://h-deb.clg.qc.ca/Sujets/TrucsScouts/Comprendre_enable_if.html
 //? Ref : https://www.cs.auckland.ac.nz/references/unix/digital/AQTLTBTE/DOCU_032.HTM
 //? Ref : https://www.enseignement.polytechnique.fr/informatique/INF478/docs/Cpp/en/cpp/types/is_integral.html
-
-#include "../Iterators/iterator.hpp"
 
 namespace ft {
 
@@ -76,10 +76,16 @@ namespace ft {
 
         public:
             template <class T>
-            inline operator T*() const { return 0; }
+            inline operator T*() const 
+            { 
+                return 0; 
+            }
 
             template <class C, class T>
-            inline operator T C::*() const { return 0; }
+            inline operator T C::*() const 
+            { 
+                return 0; 
+            }
     };
     
     static nullptr_t null_pointer = {};

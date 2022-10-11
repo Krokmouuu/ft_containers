@@ -32,21 +32,21 @@
 // }
 
 
-void test(void)
-{
-	ft::map<string, int> coucou;
-    // coucou.insert(ft::make_pair("earth", 1));
-    // coucou.insert(ft::make_pair("sun", 3));
-    // // ft::map<string,int>::iterator haha = coucou.find("earth");
+// void test(void)
+// {
+// 	ft::map<int, int> coucou;
+//     // coucou.insert(ft::make_pair("earth", 1));
+//     // coucou.insert(ft::make_pair("sun", 3));
+//     // // ft::map<string,int>::iterator haha = coucou.find("earth");
 
 
-    // cout << coucou.at("earth") << endl;
-    return ;
-}
+//     // cout << coucou.at("earth") << endl;
+//     return ;
+// }
 
 int main() 
 {
-    test();
+    // test();
     cout << "------------------------------------" << endl;
     // realtest();
     return 0;
