@@ -9,6 +9,11 @@
 //? Ref : https://www.geeksforgeeks.org/red-black-tree-set-1-introduction-2/
 //? Ref : https://www.programiz.com/dsa/red-black-tree
 //? Ref : https://www.rpi.edu/dept/acm/packages/stl/stl_tree.h
+//? Ref : https://www.youtube.com/watch?v=3RQtq7PDHog
+//? Ref : https://www.youtube.com/watch?v=qA02XWRTBdw
+//? Ref : https://www.youtube.com/watch?v=w5cvkTXY0vQ
+
+//// Fuck this project for real.
 
 namespace ft {
 
