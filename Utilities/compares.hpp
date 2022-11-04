@@ -2,6 +2,7 @@
 
 #include "../Iterators/iterator.hpp"
 #include "enable_if.hpp"
+#include "pair.hpp"
 
 //? Ref : https://en.cppreference.com/w/cpp/algorithm/lexicographical_compare
 

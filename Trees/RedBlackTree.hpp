@@ -46,7 +46,7 @@ public:
 
 	iterator begin() 
     { 
-		        return iterator(_root->child_left); 
+		return iterator(_root->child_left); 
     }
 
 	const_iterator begin() const 

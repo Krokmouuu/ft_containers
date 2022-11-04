@@ -6,6 +6,10 @@
 #include "Utilities/pair.hpp"
 #include "Utilities/compares.hpp"
 
+using std::string;
+using std::cout;
+using std::endl;
+
 //? Ref : https://en.cppreference.com/w/cpp/container/set
 
 namespace ft 

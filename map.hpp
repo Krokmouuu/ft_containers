@@ -17,7 +17,6 @@ using std::endl;
 
 namespace ft
 {
-
     template <typename _Key, typename _T, typename Compare = std::less<_Key>, typename _Alloc = std::allocator<ft::pair<const _Key, _T> > >
     class map {
 
